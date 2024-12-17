@@ -47,10 +47,11 @@ interface IUploadDriver
 	function getUploadedFiles(): array;
 
 	/**
-	 * @param Nette\Http\FileUpload
+	 * @param Nette\Http\FileUpload $file
+     * @param AlesWita\DropzoneUploader\ChunkInfo|null $chunkInfo
 	 * @return bool
 	 */
-	function upload(Nette\Http\FileUpload $file): bool;
+	function upload(Nette\Http\FileUpload $file, ?AlesWita\DropzoneUploader\ChunkInfo $chunkInfo = null): bool;
 
 	/**
 	 * @param string

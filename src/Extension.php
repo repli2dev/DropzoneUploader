@@ -37,6 +37,8 @@ class Extension extends Nette\DI\CompilerExtension
 				'paramName' => Expect::string('file'),
 				'acceptedFiles' => Expect::array(),
 				'addRemoveLinks' => Expect::bool(false),
+                'chunking' => Expect::bool(false),
+                'chuckSize' => Expect::int(2 * 1024 * 1024),
 			]),
 			'messages' => Expect::structure([
 				'dictDefaultMessage' => Expect::string('Drop files here to upload'),
@@ -122,6 +124,10 @@ class Extension extends Nette\DI\CompilerExtension
 			}
 		}
 
+        // prevent chunking with parallelUploads > 1
+        if ($config->settings->parallelUploads > 1 && $config->settings->chunking) {
+            throw new DropzoneUploaderException( 'Chunking cannot be enabled with parallel uploads!' );
+        }
 
 
 		// setting acceptedFiles

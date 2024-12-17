@@ -61,17 +61,38 @@ class Move extends UploadDriver
 
 
 	/**
-	 * @param Nette\Http\FileUpload
+	 * @param Nette\Http\FileUpload $file
+     * @param AlesWita\DropzoneUploader\ChunkInfo|null $chunkInfo
 	 * @return bool
 	 */
-	public function upload(Nette\Http\FileUpload $file): bool
+	public function upload(Nette\Http\FileUpload $file, ?AlesWita\DropzoneUploader\ChunkInfo $chunkInfo = null): bool
 	{
 		$parent = parent::upload($file);
 
 		if ($parent === true) {
 			try {
 				$dest = $this->folder === null ? $this->settings['dir'] . '/' . $file->getName() : $this->settings['dir'] . '/' . $this->folder . '/' . $file->getName();
+                if ($chunkInfo !== null) {
+                    $dest .= '.' . $chunkInfo->getChunkIndex();
+                }
 				$file->move($dest);
+                if ($chunkInfo !== null && $chunkInfo->isLastChunk()) {
+                    foreach (range(0, $chunkInfo->getTotalChunkCount() - 1) as $i) {
+                        $chunkFile = $dest . '.' . $i;
+                        $chunkFileContent = file_get_contents($chunkFile);
+                        if ($chunkFileContent === false) {
+                            return false;
+                        }
+                        file_put_contents($dest, $chunkFileContent, FILE_APPEND);
+                    }
+                    foreach (range(0, $chunkInfo->getTotalChunkCount() - 1) as $i) {
+                        // Remove all chunk files
+                        $chunkFile = $dest . '.' . $i;
+                        if (file_exists($chunkFile) && !unlink($chunkFile)) {
+                            return true;
+                        }
+                    }
+                }
 				return true;
 			} catch (Nette\InvalidStateException $e) {
 			}

@@ -76,10 +76,11 @@ abstract class UploadDriver implements IUploadDriver
 
 
 	/**
-	 * @param Nette\Http\FileUpload
-	 * @return bool
+	 * @param Nette\Http\FileUpload $file
+     * @param AlesWita\DropzoneUploader\ChunkInfo|null $chunkInfo
+     * @return bool
 	 */
-	public function upload(Nette\Http\FileUpload $file): bool
+	public function upload(Nette\Http\FileUpload $file, ?AlesWita\DropzoneUploader\ChunkInfo $chunkInfo = null): bool
 	{
 		if (!$file->isOk()) {
 			return false;

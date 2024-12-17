@@ -68,12 +68,17 @@ class Ftp extends UploadDriver
 
 
 	/**
-	 * @param Nette\Http\FileUpload
+	 * @param Nette\Http\FileUpload $file
+     * @param AlesWita\DropzoneUploader\ChunkInfo|null $chunkInfo
 	 * @return bool
 	 */
-	public function upload(Nette\Http\FileUpload $file): bool
+	public function upload(Nette\Http\FileUpload $file, AlesWita\DropzoneUploader\ChunkInfo $chunkInfo = null): bool
 	{
 		$parent = parent::upload($file);
+
+        if ($chunkInfo !== null) {
+            return false; // not supported
+        }
 
 		if ($parent === true) {
 			try {

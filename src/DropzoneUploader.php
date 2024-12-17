@@ -265,9 +265,10 @@ class DropzoneUploader extends Nette\Application\UI\Control
 
 		$form->onSuccess[] = function (Nette\Application\UI\Form $form, array $values): void {
 			$httpData = $form->getHttpData();
+            $chunkInfo = ChunkInfo::attemptToCreateFromHttpData($httpData);
 			$this->uploadDriver->setFolder($values['folder']);
 
-			if ($this->uploadDriver->upload($httpData['file'])) {
+			if ($this->uploadDriver->upload($httpData['file'], $chunkInfo)) {
 				$this->callEvent($this->onUpload, [$this, $httpData['file']]);
 			}
 		};
