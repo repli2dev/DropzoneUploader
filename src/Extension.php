@@ -38,7 +38,7 @@ class Extension extends Nette\DI\CompilerExtension
 				'acceptedFiles' => Expect::array(),
 				'addRemoveLinks' => Expect::bool(false),
                 'chunking' => Expect::bool(false),
-                'chuckSize' => Expect::int(2 * 1024 * 1024),
+                'chunkSize' => Expect::int(2 * 1024 * 1024),
 			]),
 			'messages' => Expect::structure([
 				'dictDefaultMessage' => Expect::string('Drop files here to upload'),
