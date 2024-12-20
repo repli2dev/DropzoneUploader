@@ -71,14 +71,14 @@ class Move extends UploadDriver
 
 		if ($parent === true) {
 			try {
-				$dest = $this->folder === null ? $this->settings['dir'] . '/' . $file->getName() : $this->settings['dir'] . '/' . $this->folder . '/' . $file->getName();
+				$dest = $originalDest = $this->folder === null ? $this->settings['dir'] . '/' . $file->getName() : $this->settings['dir'] . '/' . $this->folder . '/' . $file->getName();
                 if ($chunkInfo !== null) {
                     $dest .= '.' . $chunkInfo->getChunkIndex();
                 }
 				$file->move($dest);
                 if ($chunkInfo !== null && $chunkInfo->isLastChunk()) {
                     foreach (range(0, $chunkInfo->getTotalChunkCount() - 1) as $i) {
-                        $chunkFile = $dest . '.' . $i;
+                        $chunkFile = $originalDest . '.' . $i;
                         $chunkFileContent = file_get_contents($chunkFile);
                         if ($chunkFileContent === false) {
                             return false;
@@ -87,7 +87,7 @@ class Move extends UploadDriver
                     }
                     foreach (range(0, $chunkInfo->getTotalChunkCount() - 1) as $i) {
                         // Remove all chunk files
-                        $chunkFile = $dest . '.' . $i;
+                        $chunkFile = $originalDest . '.' . $i;
                         if (file_exists($chunkFile) && !unlink($chunkFile)) {
                             return true;
                         }
