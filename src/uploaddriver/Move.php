@@ -11,6 +11,8 @@ namespace AlesWita\DropzoneUploader\UploadDriver;
 
 use AlesWita;
 use Nette;
+use function file_put_contents;
+use const FILE_APPEND;
 
 
 /**
@@ -83,7 +85,7 @@ class Move extends UploadDriver
                         if ($chunkFileContent === false) {
                             return false;
                         }
-                        file_put_contents($dest, $chunkFileContent, FILE_APPEND);
+                        file_put_contents($originalDest, $chunkFileContent, $i !== 0 ? FILE_APPEND : 0);
                     }
                     foreach (range(0, $chunkInfo->getTotalChunkCount() - 1) as $i) {
                         // Remove all chunk files
