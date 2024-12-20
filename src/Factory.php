@@ -35,7 +35,7 @@ class Factory
 		'js' => __DIR__ . '/templates/bootstrap_v4/js.latte',
 	];
 
-	/** @var Nette\Localization\Translator */
+	/** @var Nette\Localization\ITranslator */
 	private $translator;
 
 	/** @var array */
@@ -52,10 +52,10 @@ class Factory
 
 
 	/**
-	 * @param Nette\Localization\Translator
+	 * @param Nette\Localization\ITranslator
 	 * @return self
 	 */
-	public function setTranslator(Nette\Localization\Translator $translator): self
+	public function setTranslator(Nette\Localization\ITranslator $translator): self
 	{
 		$this->translator = $translator;
 		return $this;
@@ -107,9 +107,9 @@ class Factory
 
 
 	/**
-	 * @return Nette\Localization\Translator
+	 * @return Nette\Localization\ITranslator
 	 */
-	public function getTranslator(): Nette\Localization\Translator
+	public function getTranslator(): Nette\Localization\ITranslator
 	{
 		return $this->translator;
 	}

@@ -16,7 +16,7 @@ use Nette;
  * @author Ales Wita
  * @license MIT
  */
-final class FakeTranslator implements Nette\Localization\Translator
+final class FakeTranslator implements Nette\Localization\ITranslator
 {
 
 	/**
