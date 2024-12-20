@@ -38,7 +38,7 @@ class Extension extends Nette\DI\CompilerExtension
 				'acceptedFiles' => Expect::array(),
 				'addRemoveLinks' => Expect::bool(false),
                 'chunking' => Expect::bool(false),
-                'chunkSize' => Expect::int(2 * 1024 * 1024),
+                'chunkSize' => Expect::anyOf(Expect::string(), Expect::int(), Expect::float())->default('20mb'),
 			]),
 			'messages' => Expect::structure([
 				'dictDefaultMessage' => Expect::string('Drop files here to upload'),
@@ -123,6 +123,13 @@ class Extension extends Nette\DI\CompilerExtension
 				throw new DropzoneUploaderException( 'Maximum file size setting is unknown!' );
 			}
 		}
+        // setting chunkSize
+        if($config->settings->chunkSize !== null) {
+            $config->settings->chunkSize = $this->convertToBytes( $config->settings->chunkSize );
+            if ( $config->settings->chunkSize === null ) {
+                throw new DropzoneUploaderException( 'Chunk size setting is unknown!' );
+            }
+        }
 
         // prevent chunking with parallelUploads > 1
         if ($config->settings->parallelUploads > 1 && $config->settings->chunking) {
