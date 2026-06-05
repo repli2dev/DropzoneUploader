@@ -10,20 +10,20 @@
 		}
 	],
 	"require": {
-    "php": ">=7.2",
+		"php": ">=8.1",
 		"nette/application": "^3.0",
 		"nette/di": "^3.0",
 		"nette/forms": "^3.0",
 		"nette/http": "^3.0",
-		"nette/utils": "^3.0||^4.0",
+		"nette/utils": "^4.0",
 		"dg/ftp-php": "~1.2"
 	},
 	"require-dev": {
-		"nette/robot-loader": "^3.0",
+		"nette/robot-loader": "^4.0",
 		"nette/bootstrap": "^3.0",
 		"latte/latte": "^2.4 || ~3.0.0",
 		"tracy/tracy": "^2.4 || ~3.0.0",
-		"nette/tester": "~2.0.0"
+		"nette/tester": "^2.5"
 	},
 	"autoload": {
 		"classmap": ["src/"]

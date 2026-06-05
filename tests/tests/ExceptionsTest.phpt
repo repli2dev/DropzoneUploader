@@ -4,7 +4,7 @@
  * This file is part of the AlesWita\DropzoneUploader
  * Copyright (c) 2017 Ales Wita (aleswita+github@gmail.com)
  *
- * @phpVersion 7.1.0
+ * @phpVersion 8.1.0
  */
 
 declare(strict_types=1);

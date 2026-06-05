@@ -41,7 +41,7 @@ class Factory
 	/** @var array */
 	private $dropzoneTemplate = self::DEFAULT_TEMPLATE;
 
-	/** @var AlesWita\DropzoneUploader\UploadDriver\IUploadRiver */
+	/** @var AlesWita\DropzoneUploader\UploadDriver\IUploadDriver */
 	private $uploadDriver;
 
 	/** @var array */

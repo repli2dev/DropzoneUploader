@@ -18,6 +18,6 @@ require_once __DIR__ . '/app/service/FakeTranslator.php';
 
 Tester\Environment::setup();
 
-define('TEMP_DIR', __DIR__ . '/tmp/' . lcg_value());
+define('TEMP_DIR', __DIR__ . '/tmp/' . bin2hex(random_bytes(8)));
 @mkdir(dirname(TEMP_DIR));
 @mkdir(TEMP_DIR);

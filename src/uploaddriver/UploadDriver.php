@@ -22,7 +22,7 @@ abstract class UploadDriver implements IUploadDriver
 	/** @var array */
 	protected $settings = [];
 
-	/** @var string */
+	/** @var string|null */
 	protected $folder;
 
 

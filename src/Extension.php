@@ -70,7 +70,8 @@ class Extension extends Nette\DI\CompilerExtension
 
 		if ($config->dropzoneTemplate !== null) {
 			if ($config->dropzoneTemplate instanceof Nette\DI\Definitions\Statement) {
-				$config->dropzoneTemplate = constant($config->dropzoneTemplate->arguments[0]);
+				$arg = $config->dropzoneTemplate->arguments[0];
+				$config->dropzoneTemplate = is_array($arg) ? $arg : constant($arg);
 			}
 			if($config->dropzoneTemplate instanceof \stdClass){
 				$config->dropzoneTemplate = (array) $config->dropzoneTemplate;
@@ -97,24 +98,29 @@ class Extension extends Nette\DI\CompilerExtension
 		}
 
 		// upload driver
-		if (!class_exists($config->uploadDriver->driver)) {
-			throw new DropzoneUploaderException('Upload driver "' . $config->uploadDriver->driver . '" no exists!');
-		} else {
-			$uploadDriver = new $config->uploadDriver->driver;
+		$driverClass = $config->uploadDriver->driver;
+		if (!class_exists($driverClass)) {
+			throw new DropzoneUploaderException('Upload driver "' . $driverClass . '" no exists!');
+		}
 
-			if (!array_key_exists('AlesWita\\DropzoneUploader\\UploadDriver\\IUploadDriver', class_implements($uploadDriver))) {
-				throw new DropzoneUploaderException('Upload driver must implements ' . IUploadDriver::class . ' interface!');
-			} else {
-				foreach ($config->uploadDriver->settings as $key => $val) {
-					if (!in_array($key, array_keys($uploadDriver->getSettings()), true)) {
-						throw new DropzoneUploaderException('Unknow upload driver setting "' . $key . '"!');
-					}
-				}
+		$uploadDriver = new $driverClass;
 
-				$uploadDriver->setSettings($config->uploadDriver->settings);
-				$dropzoneUploader->addSetup('$service->setUploadDriver(?)', [$uploadDriver]);
+		if (!array_key_exists('AlesWita\\DropzoneUploader\\UploadDriver\\IUploadDriver', class_implements($uploadDriver))) {
+			throw new DropzoneUploaderException('Upload driver must implements ' . IUploadDriver::class . ' interface!');
+		}
+
+		foreach ($config->uploadDriver->settings as $key => $val) {
+			if (!in_array($key, array_keys($uploadDriver->getSettings()), true)) {
+				throw new DropzoneUploaderException('Unknow upload driver setting "' . $key . '"!');
 			}
 		}
+
+		$container->addDefinition($this->prefix('uploadDriver'))
+			->setType(IUploadDriver::class)
+			->setFactory($driverClass)
+			->addSetup('setSettings', [$config->uploadDriver->settings]);
+
+		$dropzoneUploader->addSetup('setUploadDriver', ['@' . $this->prefix('uploadDriver')]);
 
 		// setting maxFilesize
 		if($config->settings->maxFilesize !== null) {

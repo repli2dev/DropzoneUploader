@@ -37,7 +37,7 @@ class DropzoneUploader extends Nette\Application\UI\Control
 	/** @var array */
 	private $dropzoneTemplate;
 
-	/** @var AlesWita\DropzoneUploader\UploadDriver\IUploadRiver */
+	/** @var AlesWita\DropzoneUploader\UploadDriver\IUploadDriver */
 	private $uploadDriver;
 
 	/** @var array */
@@ -46,7 +46,7 @@ class DropzoneUploader extends Nette\Application\UI\Control
 	/** @var array */
 	private $messages;
 
-	/** @var string */
+	/** @var string|null */
 	private $folder;
 
 
@@ -241,7 +241,7 @@ class DropzoneUploader extends Nette\Application\UI\Control
 	 * @param array
 	 * @return void
 	 */
-	private function callEvent(array $event = null, array $args = []): void
+	private function callEvent(?array $event = null, array $args = []): void
 	{
 		if ($event !== null) {
 			foreach ($event as $callback) {
@@ -282,7 +282,7 @@ class DropzoneUploader extends Nette\Application\UI\Control
 	 * @param string
 	 * @return void
 	 */
-	public function handleDownload(string $folder = null, string $file = null): void
+	public function handleDownload(?string $folder = null, ?string $file = null): void
 	{
 		if ($file !== null) {
 			$this->uploadDriver->setFolder($folder);
@@ -297,7 +297,7 @@ class DropzoneUploader extends Nette\Application\UI\Control
 	 * @param string
 	 * @return void
 	 */
-	public function handleRemove(string $folder = null, string $file = null): void
+	public function handleRemove(?string $folder = null, ?string $file = null): void
 	{
 		if ($this->settings['addRemoveLinks'] && $file !== null) {
 			$this->uploadDriver->setFolder($folder);
@@ -313,7 +313,7 @@ class DropzoneUploader extends Nette\Application\UI\Control
 	 * @param string
 	 * @return void
 	 */
-	public function handleUploadedFiles(string $folder = null): void
+	public function handleUploadedFiles(?string $folder = null): void
 	{
 		$this->uploadDriver->setFolder($folder);
 		$this->presenter->payload->uploadedFiles = $this->uploadDriver->getUploadedFiles();
